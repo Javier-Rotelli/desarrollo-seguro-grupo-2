@@ -1,0 +1,129 @@
+{
+	"info": {
+		"_postman_id": "e29ccdab-d2bf-4035-aa9c-b8e01de300b6",
+		"name": "Courses",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24526490"
+	},
+	"item": [
+		{
+			"name": "localhost:8080/Course/",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/Course/",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Course",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/Course/",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Diplomatura Desarrollo Seguro de App - 3ra. edición\",\n    \"initDate\": \"2023-03-05T03:00:00.000Z\",\n    \"enrolled\": 0\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/Course/",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Course",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/Course/de47e087-4736-4733-ad67-12f71371636e",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/Course/de47e087-4736-4733-ad67-12f71371636e",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Course",
+						"de47e087-4736-4733-ad67-12f71371636e"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/Course/de47e087-4736-4733-ad67-12f71371636e Copy",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"de47e087-4736-4733-ad67-12f71371636e\",\n    \"name\": \"Diplomatura Desarrollo Seguro de App - 2da. edición\",\n    \"initDate\": \"2022-08-20T03:00:00.000Z\",\n    \"enrolled\": 25\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/Course/de47e087-4736-4733-ad67-12f71371636e",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Course",
+						"de47e087-4736-4733-ad67-12f71371636e"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/Course/de47e087-4736-4733-ad67-12f71371636e Copy 2",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/Course/907b9a75-7d64-41e4-aad7-f82939c5a566",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Course",
+						"907b9a75-7d64-41e4-aad7-f82939c5a566"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "toRemove",
+			"value": "907b9a75-7d64-41e4-aad7-f82939c5a566"
+		}
+	]
+}
