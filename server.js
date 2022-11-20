@@ -9,6 +9,7 @@ const HOST = "0.0.0.0";
 
 // App
 const app = express();
+app.use(express.json());
 
 // reduciendo la informacion que damos
 app.disable("x-powered-by");
@@ -17,7 +18,7 @@ app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
-app.use("Course/", courseRouter);
+app.use("/Course", courseRouter);
 
 // Cambio los handlers por defecto para evitar dar informacion
 // de la plataforma
