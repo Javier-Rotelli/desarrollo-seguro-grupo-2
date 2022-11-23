@@ -1,7 +1,10 @@
 "use strict";
-import express from "express";
+import express from 'express'
+import passport from 'passport'
 
-import courseRouter from "./courses/routes.js";
+import authServer from './auth/auth-server.js'
+
+import courseRouter from "./courses/routes.js"
 
 // Constants
 const PORT = 8080;
@@ -17,6 +20,13 @@ app.disable("x-powered-by");
 app.get("/", (req, res) => {
   res.send("Hello World");
 });
+
+app.post("/token",
+  // TODO: me hace falta authenticate? para que si es el password en si lo que uso?
+  // passport.authenticate('basic', { session: false }),
+  authServer.token(),
+  authServer.errorHandler()
+)
 
 app.use("/Course", courseRouter);
 

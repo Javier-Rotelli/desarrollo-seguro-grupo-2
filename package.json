@@ -12,7 +12,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "oauth2orize": "^1.11.1",
+    "oauth2orize-jwt-bearer": "^0.2.0",
+    "passport": "^0.6.0",
+    "passport-http": "^0.3.0",
+    "passport-http-bearer": "^1.0.1"
   },
   "engines": {
     "npm": ">=8.19.1",

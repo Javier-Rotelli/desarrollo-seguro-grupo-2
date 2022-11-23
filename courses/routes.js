@@ -6,12 +6,16 @@ import {
   removeCourse,
   updateCourse,
 } from "./db.js";
+import passport from 'passport'
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  res.json(getCourses());
-});
+router.get("/",
+  passport.authenticate('bearer', { session: false }),
+  (req, res) => {
+    res.json(getCourses());
+  }
+)
 
 router.get("/:id", (req, res) => {
   // TODO: Validar el input
