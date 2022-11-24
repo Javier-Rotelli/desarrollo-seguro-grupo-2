@@ -1,20 +1,24 @@
 import oauth2orize from 'oauth2orize'
 import passport from 'passport'
-import { BasicStrategy } from 'passport-http'
 import { Strategy as BearerStrategy } from 'passport-http-bearer'
+import jwt from 'jsonwebtoken'
 
 import { getUser, verifyPassword } from '../users/db.js'
-import { getClient, verifySecret } from '../clients/db.js'
-import { getToken } from '../tokens/db.js'
+import { getClient } from '../clients/db.js'
+import { getToken, saveToken } from '../tokens/db.js'
+
+const JWT_SECRET = 'ssshhhhh...sshhhhh'
 
 const authServer = oauth2orize.createServer()
 
 authServer.exchange(
   oauth2orize.exchange.password(
     (client, username, passwd, scope, reqBody, reqAuthInfo, issued) => {
-      // TODO: call issueTokens
-      console.log('issue JWT!')
       console.log(client, username, passwd, scope, reqBody, reqAuthInfo, issued)
+      const user = getUser(username)
+      if (!user || !verifyPassword(username, passwd)) return issued(null, false)
+
+      issueTokens({ username }, issued)
     }
   )
 )
@@ -52,21 +56,37 @@ authServer.exchange(oauth2orize.exchange.refreshToken((client, refreshToken, sco
   // });
 }));
 
-function issueTokens(userId, clientId, done) {
-  // db.users.findById(userId, (error, user) => {
-  //   // TODO: make jwt
-  //   const accessToken = utils.getUid(256);
-  //   const refreshToken = utils.getUid(256);
-  //   db.accessTokens.save(accessToken, userId, clientId, (error) => {
-  //     if (error) return done(error);
-  //     db.refreshTokens.save(refreshToken, userId, clientId, (error) => {
-  //       if (error) return done(error);
-  //       // Add custom params, e.g. the username
-  //       const params = { username: user.name };
-  //       return done(null, accessToken, refreshToken, params);
-  //     });
-  //   });
-  // });
+const issueTokens = ({ username, clientId }, issued) => {
+
+  if (username) {
+    const user = getUser(username)
+
+    // TODO: la firma de token esta SYNCH porque no quiero callbacks, el tema es que passport no se banca promises habria que wrappear?
+    const makeToken = expiresIn => jwt.sign(
+      { username },
+      // sign with RSA SHA256
+      // var privateKey = fs.readFileSync('private.key');
+      // var token = jwt.sign({ foo: 'bar' }, privateKey, { algorithm: 'RS256' });
+      // TODO: use private key
+      JWT_SECRET,
+      // TODO: maybe use assymetric RS256 ?
+      { algorithm: 'HS256', expiresIn }
+    )
+
+    const accessToken = makeToken('5m')
+    const refreshToken = makeToken('20m')
+
+    // store tokens
+    saveToken({ username }, accessToken)
+    saveToken({ username }, refreshToken)
+
+    const params = { username: user.name }
+    return issued(null, accessToken, refreshToken, params)
+  } else if (clientId) {
+    ;
+  } else {
+    throw new Error('username or clientId are required to issue a token')
+  }
 }
 
 authServer.serializeClient((clientOrUser, done) => {
@@ -84,22 +104,7 @@ authServer.deserializeClient((identifier, done) => {
   return done(new Error('DeserializeClient problem.'))
 })
 
-// When using /token endpoint
-passport.use(new BasicStrategy(
-  (clientIdOrUserName, secretOrPassword, done) => {
-    const user = getUser(clientIdOrUserName)
-    if (user && !verifyPassword(clientIdOrUserName, secretOrPassword)) return done(null, false)
-
-    const client = getClient(clientIdOrUserName)
-    if (client && !verifySecret(clientIdOrUserName, secretOrPassword)) return done(null, false)
-
-    if (!user && !client) return done(null, false)
-
-    return done(null, user || client)
-  }
-))
-
-// When using any other secured endpoint
+// When using any secured endpoint
 passport.use(new BearerStrategy(
   (accessToken, done) => {
     const token = getToken(accessToken)
