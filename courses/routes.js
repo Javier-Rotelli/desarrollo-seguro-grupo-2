@@ -17,7 +17,7 @@ router.get("/",
   }
 )
 
-router.get("/:id", (req, res) => {
+router.get("/:id", passport.authenticate('bearer', { session: false }), (req, res) => {
   // TODO: Validar el input
   const course = getCourse(req.params.id);
 
@@ -28,7 +28,7 @@ router.get("/:id", (req, res) => {
   }
 });
 
-router.post("/", (req, res) => {
+router.post("/", passport.authenticate('bearer', { session: false }), (req, res) => {
   const course = req.body;
   // TODO: Validar el input
   const savedCourse = addCourse(course);
@@ -36,13 +36,13 @@ router.post("/", (req, res) => {
   res.json(savedCourse);
 });
 
-router.put("/:id", (req, res) => {
+router.put("/:id", passport.authenticate('bearer', { session: false }), (req, res) => {
   // TODO: Validar el input
   const course = updateCourse(req.params.id, req.body);
   res.json(course);
 });
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id", passport.authenticate('bearer', { session: false }), (req, res) => {
   // TODO: Validar el input
   removeCourse(req.params.id);
   return res.json({ status: "ok" });
