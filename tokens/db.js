@@ -11,7 +11,6 @@ export const getToken = token => {
 const newToken = ({ token, username, clientId }) => {
   const payload = token.split('.')[1]
   const { iat, exp } = JSON.parse(Buffer.from(payload, 'base64').toString('utf8'))
-  console.log(iat, exp)
   return {
     token,
     username,

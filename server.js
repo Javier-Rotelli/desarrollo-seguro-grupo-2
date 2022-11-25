@@ -1,8 +1,7 @@
 "use strict";
 import express from 'express'
-import passport from 'passport'
 
-import authServer from './auth/auth-server.js'
+import apiAuth from './auth/api-auth.js'
 
 import courseRouter from "./courses/routes.js"
 
@@ -14,19 +13,15 @@ const HOST = "0.0.0.0";
 const app = express();
 app.use(express.json());
 
+// Setup Api Auth
+apiAuth(app)
+
 // reduciendo la informacion que damos
 app.disable("x-powered-by");
 
 app.get("/", (req, res) => {
   res.send("Hello World");
 });
-
-app.post("/token",
-  // TODO: me hace falta authenticate? para que si es el password en si lo que uso?
-  // passport.authenticate('basic', { session: false }),
-  authServer.token(),
-  authServer.errorHandler()
-)
 
 app.use("/Course", courseRouter);
 

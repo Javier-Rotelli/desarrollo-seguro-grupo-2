@@ -9,5 +9,5 @@ export const getClient = (clientId) => {
 export const verifySecret = (clientId, clientSecret) => {
   const client = getClient(clientId)
   // TODO: crypt password
-  return client && client.secret === clientSecret
+  return client && client.clientSecret === clientSecret
 }

@@ -1,11 +1,9 @@
 import oauth2orize from 'oauth2orize'
-import passport from 'passport'
-import { Strategy as BearerStrategy } from 'passport-http-bearer'
 import jwt from 'jsonwebtoken'
 
 import { getUser, verifyPassword } from '../users/db.js'
-import { getClient } from '../clients/db.js'
-import { getToken, saveToken } from '../tokens/db.js'
+import { getClient, verifySecret } from '../clients/db.js'
+import { saveToken } from '../tokens/db.js'
 
 const JWT_SECRET = 'ssshhhhh...sshhhhh'
 
@@ -14,7 +12,6 @@ const authServer = oauth2orize.createServer()
 authServer.exchange(
   oauth2orize.exchange.password(
     (client, username, passwd, scope, reqBody, reqAuthInfo, issued) => {
-      console.log(client, username, passwd, scope, reqBody, reqAuthInfo, issued)
       const user = getUser(username)
       if (!user || !verifyPassword(username, passwd)) return issued(null, false)
 
@@ -25,10 +22,17 @@ authServer.exchange(
 
 authServer.exchange(
   oauth2orize.exchange.clientCredentials(
-    (client, scope, done) => {
-      // TODO: call issueTokens
-      console.log('issue JWT!')
-      console.log(client, scope)
+    // first arg is client, which would be not null if authenticated by basic strat before,
+    // but we do not use a previous basic strat because if not, when using Resource Owner Password
+    // then you would also be required to provide a basic auth which is not the idea.
+    // So we will get client credentials from the body here, and populate the client ourselves now.
+    (_, scope, body, authInfo, issued) => {
+      const { client_id: clientId, client_secret: clientSecret } = body
+      const client = getClient(clientId)
+      if (client && !verifySecret(clientId, clientSecret)) return issued(null, false)
+      if (!client) return issued(null, false)
+
+      issueTokens({ clientId: client.clientId }, issued)
     }
   )
 )
@@ -56,34 +60,40 @@ authServer.exchange(oauth2orize.exchange.refreshToken((client, refreshToken, sco
   // });
 }));
 
+// TODO: la firma de token esta SYNCH porque no quiero callbacks, el tema es que passport no se banca promises habria que wrappear?
+const makeToken = (payload, expiresIn) => jwt.sign(
+  payload,
+  // sign with RSA SHA256
+  // var privateKey = fs.readFileSync('private.key');
+  // var token = jwt.sign({ foo: 'bar' }, privateKey, { algorithm: 'RS256' });
+  // TODO: use private key
+  JWT_SECRET,
+  // TODO: maybe use assymetric RS256 ?
+  { algorithm: 'HS256', expiresIn }
+)
+
 const issueTokens = ({ username, clientId }, issued) => {
-
   if (username) {
-    const user = getUser(username)
-
-    // TODO: la firma de token esta SYNCH porque no quiero callbacks, el tema es que passport no se banca promises habria que wrappear?
-    const makeToken = expiresIn => jwt.sign(
-      { username },
-      // sign with RSA SHA256
-      // var privateKey = fs.readFileSync('private.key');
-      // var token = jwt.sign({ foo: 'bar' }, privateKey, { algorithm: 'RS256' });
-      // TODO: use private key
-      JWT_SECRET,
-      // TODO: maybe use assymetric RS256 ?
-      { algorithm: 'HS256', expiresIn }
-    )
-
-    const accessToken = makeToken('5m')
-    const refreshToken = makeToken('20m')
+    const payload = { username }
+    const accessToken = makeToken(payload, '5m')
+    const refreshToken = makeToken(payload, '20m')
 
     // store tokens
-    saveToken({ username }, accessToken)
-    saveToken({ username }, refreshToken)
+    saveToken(payload, accessToken)
+    saveToken(payload, refreshToken)
 
-    const params = { username: user.name }
-    return issued(null, accessToken, refreshToken, params)
+    return issued(null, accessToken, refreshToken, payload)
   } else if (clientId) {
-    ;
+    // TODO: casi todo el codigo copiado, podria ser un toque distinto o reusar
+    const payload = { clientId }
+    const accessToken = makeToken(payload, '5m')
+    const refreshToken = makeToken(payload, '20m')
+
+    // store tokens
+    saveToken(payload, accessToken)
+    saveToken(payload, refreshToken)
+
+    return issued(null, accessToken, refreshToken, payload)
   } else {
     throw new Error('username or clientId are required to issue a token')
   }
@@ -103,26 +113,5 @@ authServer.deserializeClient((identifier, done) => {
 
   return done(new Error('DeserializeClient problem.'))
 })
-
-// When using any secured endpoint
-passport.use(new BearerStrategy(
-  (accessToken, done) => {
-    const token = getToken(accessToken)
-    if (!token) return done(null, false)
-
-    if (token.username) {
-      const maybeUser = getUser(token.username)
-      if (!maybeUser) return done(null, false)
-      // TODO: maybe redeact user
-      done(null, maybeUser)
-    }
-    if (token.clientId) {
-      const maybeClient = getClient(token.clientId)
-      if (!maybeClient) return done(null, false)
-      // TODO: maybe redeact user
-      done(null, maybeClient)
-    }
-  }
-));
 
 export default authServer
