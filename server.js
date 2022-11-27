@@ -1,6 +1,7 @@
 "use strict";
 import express from "express";
 import helmet from "helmet";
+import hpp from "hpp";
 
 import courseRouter from "./courses/routes.js";
 
@@ -14,6 +15,10 @@ const app = express();
 app.use(helmet());
 
 app.use(express.json());
+
+// prevenir contaminacion de parametros http
+// https://cheatsheetseries.owasp.org/cheatsheets/Nodejs_Security_Cheat_Sheet.html#prevent-http-parameter-pollution
+app.use(hpp({}));
 
 app.get("/", (req, res) => {
   res.send("Hello World");
