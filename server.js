@@ -1,5 +1,6 @@
 "use strict";
 import express from "express";
+import helmet from "helmet";
 
 import courseRouter from "./courses/routes.js";
 
@@ -9,10 +10,10 @@ const HOST = "0.0.0.0";
 
 // App
 const app = express();
-app.use(express.json());
+// headers seguros por default
+app.use(helmet());
 
-// reduciendo la informacion que damos
-app.disable("x-powered-by");
+app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send("Hello World");
