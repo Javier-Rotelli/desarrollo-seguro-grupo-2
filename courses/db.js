@@ -1,7 +1,8 @@
-import { readFileSync, writeFileSync } from "fs";
-import crypto from "crypto";
+import { readFileSync, writeFileSync } from 'fs'
+import { uuid } from '../cryptoUtil.js'
 
-const data = JSON.parse(readFileSync("data/courses.json", "utf8"));
+const COURSES_FILE = 'data/courses.json'
+const data = JSON.parse(readFileSync(COURSES_FILE, "utf8"));
 
 export const getCourses = () => {
   return data;
@@ -12,12 +13,12 @@ export const getCourse = (id) => {
 };
 
 export const updateCourses = (courses) => {
-  writeFileSync("data/courses.json", JSON.stringify(courses, null, "\t"));
+  writeFileSync(COURSES_FILE, JSON.stringify(courses, null, "\t"));
 };
 
 export const addCourse = (course) => {
   course = {
-    id: crypto.randomUUID(),
+    id: uuid(),
     ...course,
   };
   data.push(course);
