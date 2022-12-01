@@ -1,9 +1,13 @@
 "use strict";
+
 import express from "express";
 import helmet from "helmet";
 import hpp from "hpp";
 
-import courseRouter from "./courses/routes.js";
+import apiAuth from './auth/api-auth.js'
+
+import courseRouter from "./courses/routes.js"
+import clientRouter from "./clients/routes.js"
 
 // Constants
 const PORT = 8080;
@@ -20,11 +24,18 @@ app.use(express.json());
 // https://cheatsheetseries.owasp.org/cheatsheets/Nodejs_Security_Cheat_Sheet.html#prevent-http-parameter-pollution
 app.use(hpp({}));
 
+// Setup Api Auth
+apiAuth(app)
+
+// reduciendo la informacion que damos
+app.disable("x-powered-by");
+
 app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
-app.use("/Course", courseRouter);
+app.use("/Course", courseRouter)
+app.use("/Client", clientRouter)
 
 // Cambio los handlers por defecto para evitar dar informacion
 // de la plataforma
