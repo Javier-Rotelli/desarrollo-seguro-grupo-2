@@ -35,7 +35,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"Diplomatura Desarrollo Seguro de App - 3ra. edición\",\n    \"initDate\": \"2023-03-05T03:00:00.000Z\",\n    \"enrolled\": 0\n}",
+					"raw": "{\n    \"name\": \"Diplomatura Desarrollo Seguro de App - 4ta. edición\",\n    \"initDate\": \"2023-03-05T03:00:00.000Z\",\n    \"enrolled\": 0\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -132,7 +132,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"grant_type\": \"password\", \"username\": \"nbarrera\", \"password\": \"1234\"}",
+					"raw": "{\"grant_type\": \"password\", \"username\": \"rfort\", \"password\": \"1234\"}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -162,7 +162,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"grant_type\": \"client_credentials\", \"client_id\": \"5784fe98-caec-4d92-b2ba-9d4afa8ecabd\", \"client_secret\": \"1234\"}",
+					"raw": "{\"grant_type\": \"client_credentials\", \"client_id\": \"6f0177f9-5d8f-4387-b546-00d8dfc05cfa\", \"client_secret\": \"TfQNnL7aC9aNTLZHAP1OIGz-QXAw447xjXEI\"}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -181,6 +181,33 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Add new app client for logged in user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"app\": \"curzazo\" }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/Client",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Client"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"auth": {
@@ -188,7 +215,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "123",
+				"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJmb3J0IiwiaWF0IjoxNjY5ODY5OTk1LCJleHAiOjE2Njk4NzExOTV9.RtxcMqOVCSyhKUzyA8cdhE9Z1-QdIb-OpFzWc3HJwWN37C98F1LKh_xu7dO7Vvy61DeaU2sAbtJxEFwvpXluOI455PicyvgIerFEL8APHAN671fLPRhksTaX60wXb6lqCLXheVuHgPvuO8LrgE-gMKPlsSSUagE25Wb4uxj2dFlZ8M6gaWfjzFB3mqp5HWuEfW5olFVaRsTxJMZtADj9MV7khr5cBzNWSJfLxTbyQz6j_3oBheQXKMDeK322xrOnhYlbo4nsybsxQony75N78FTwJhwvWBsGXpveuk8B9XwCykbu0oEFhBarC3VOLT5wFfjltyhWi4_Vqg3NWx-IwdvVGBqRw1GhrW8BTV1YoGA9QMPuacNduBpeXwtc7ZshtXnXmjWiQaussRejK1nZOLNffT1REPF3AP3ZL7ka78Mp6dEhXvgYUft-12bUt38Gqi6icdrqpS-K2SeBre2eO28nCM6ALRh5aM9tses2qaC9KkV5fWoIUcqM_bAxBiUamhUxSYdUI2Lj27-Jwwt9WXftpoJLIqXncO45afsJ3gfyhWE1-rXhDv99zmqIOMh6m16pfErfw6gk5zSxi6K093XM2mor3BCP5fdx2AhdMbdbb5UFjRAwXsBojyBNz_zKi_uGhjX4WQKbLAlF2rvyD1RXCp-gFtNJKM9OYYL4siQ",
 				"type": "string"
 			}
 		]

@@ -5,7 +5,11 @@ import { getUser, verifyPassword } from '../users/db.js'
 import { getClient, verifySecret } from '../clients/db.js'
 import { saveToken } from '../tokens/db.js'
 
-const JWT_SECRET = 'ssshhhhh...sshhhhh'
+if (!process.env.JWT_RS256_PRIV_B64) {
+  console.error(`ERROR! Please configure the JWT_RS256_PRIV_B64 env var with an base64 encoded RS256 private key.`)
+  throw new Error('Setup env var JWT_RS256_PRIV_B64 env var with an base64 encoded RS256 private key')
+}
+const privateKey = Buffer.from(process.env.JWT_RS256_PRIV_B64, 'base64').toString('ascii')
 
 const authServer = oauth2orize.createServer()
 
@@ -37,44 +41,16 @@ authServer.exchange(
   )
 )
 
-// issue new tokens and remove the old ones
-authServer.exchange(oauth2orize.exchange.refreshToken((client, refreshToken, scope, done) => {
-  // db.refreshTokens.find(refreshToken, (error, token) => {
-  //   if (error) return done(error);
-  //   issueTokens(token.id, client.id, (err, accessToken, refreshToken) => {
-  //     if (err) {
-  //       done(err, null, null);
-  //     }
-  //     db.accessTokens.removeByUserIdAndClientId(token.userId, token.clientId, (err) => {
-  //       if (err) {
-  //         done(err, null, null);
-  //       }
-  //       db.refreshTokens.removeByUserIdAndClientId(token.userId, token.clientId, (err) => {
-  //         if (err) {
-  //           done(err, null, null);
-  //         }
-  //         done(null, accessToken, refreshToken);
-  //       });
-  //     });
-  //   });
-  // });
-}));
-
 // TODO: la firma de token esta SYNCH porque no quiero callbacks, el tema es que passport no se banca promises habria que wrappear?
 const makeToken = (payload, expiresIn) => jwt.sign(
   payload,
   // sign with RSA SHA256
-  // var privateKey = fs.readFileSync('private.key');
-  // var token = jwt.sign({ foo: 'bar' }, privateKey, { algorithm: 'RS256' });
-  // TODO: use private key
-  JWT_SECRET,
-  // TODO: maybe use assymetric RS256 ?
-  { algorithm: 'HS256', expiresIn }
+  privateKey,
+  { algorithm: 'RS256', expiresIn }
 )
 
-const issueTokens = ({ username, clientId }, issued) => {
-  if (username) {
-    const payload = { username }
+const issueTokenFor = (attr, context, issued) => {
+    const payload = { [attr]: context[attr] }
     const accessToken = makeToken(payload, '5m')
     const refreshToken = makeToken(payload, '20m')
 
@@ -83,17 +59,12 @@ const issueTokens = ({ username, clientId }, issued) => {
     saveToken(payload, refreshToken)
 
     return issued(null, accessToken, refreshToken, payload)
-  } else if (clientId) {
-    // TODO: casi todo el codigo copiado, podria ser un toque distinto o reusar
-    const payload = { clientId }
-    const accessToken = makeToken(payload, '5m')
-    const refreshToken = makeToken(payload, '20m')
-
-    // store tokens
-    saveToken(payload, accessToken)
-    saveToken(payload, refreshToken)
-
-    return issued(null, accessToken, refreshToken, payload)
+}
+const issueTokens = (context, issued) => {
+  if (context.username) {
+    return issueTokenFor('username', context, issued)
+  } else if (context.clientId) {
+    return issueTokenFor('clientId', context, issued)
   } else {
     throw new Error('username or clientId are required to issue a token')
   }

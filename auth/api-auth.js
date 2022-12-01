@@ -8,6 +8,15 @@ import { getClient, verifySecret } from '../clients/db.js'
 import { getToken } from '../tokens/db.js'
 import { getUser } from '../users/db.js'
 
+const redactUser = user => {
+  delete user.password
+  return user
+}
+const redactClient = client => {
+  delete client.clientSecret
+  return client
+}
+
 // setup api auth
 export default app => {
 
@@ -37,14 +46,12 @@ export default app => {
       if (token.username) {
         const maybeUser = getUser(token.username)
         if (!maybeUser) return done(null, false)
-        // TODO: maybe redeact user
-        done(null, maybeUser)
+        done(null, redactUser(maybeUser))
       }
       if (token.clientId) {
         const maybeClient = getClient(token.clientId)
         if (!maybeClient) return done(null, false)
-        // TODO: maybe redeact user
-        done(null, maybeClient)
+        done(null, redactClient(maybeClient))
       }
     }
   ));

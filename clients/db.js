@@ -1,13 +1,23 @@
-import { readFileSync } from "fs"
+import { readFileSync, writeFileSync } from 'fs'
 
-const data = JSON.parse(readFileSync("data/clients.json", "utf8"))
+import { hash, compare, apiSecret, uuid } from '../cryptoUtil.js'
+
+const CLIENTS_FILE = 'data/clients.json'
+const clients = JSON.parse(readFileSync(CLIENTS_FILE, 'utf8'))
 
 export const getClient = (clientId) => {
-  return data.find(client => client.clientId === clientId)
+  return clients.find(client => client.clientId === clientId)
+}
+
+export const createClient = (username, app) => {
+  const plainSecret = apiSecret()
+  const newClient = { username, app, clientId: uuid(), clientSecret: hash(plainSecret) }
+  clients.push(newClient)
+  writeFileSync(CLIENTS_FILE, JSON.stringify(clients, null, "\t"))
+  return { newClient, plainSecret }
 }
 
 export const verifySecret = (clientId, clientSecret) => {
   const client = getClient(clientId)
-  // TODO: crypt password
-  return client && client.clientSecret === clientSecret
+  return client && compare(clientSecret, client.clientSecret)
 }
