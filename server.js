@@ -20,6 +20,7 @@ app.use(helmet());
 
 app.use(express.json());
 
+// TODO: chequear si seguiria haciendo falta hpp si es que le agregamos un schema con validacion a la API
 // prevenir contaminacion de parametros http
 // https://cheatsheetseries.owasp.org/cheatsheets/Nodejs_Security_Cheat_Sheet.html#prevent-http-parameter-pollution
 app.use(hpp({}));
