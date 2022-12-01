@@ -1,5 +1,8 @@
 "use strict";
-import express from 'express'
+
+import express from "express";
+import helmet from "helmet";
+import hpp from "hpp";
 
 import apiAuth from './auth/api-auth.js'
 
@@ -12,7 +15,15 @@ const HOST = "0.0.0.0";
 
 // App
 const app = express();
+// headers seguros por default
+app.use(helmet());
+
 app.use(express.json());
+
+// TODO: chequear si seguiria haciendo falta hpp si es que le agregamos un schema con validacion a la API
+// prevenir contaminacion de parametros http
+// https://cheatsheetseries.owasp.org/cheatsheets/Nodejs_Security_Cheat_Sheet.html#prevent-http-parameter-pollution
+app.use(hpp({}));
 
 // Setup Api Auth
 apiAuth(app)
