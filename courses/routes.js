@@ -24,7 +24,7 @@ router.get("/:id", passport.authenticate('bearer', { session: false }), (req, re
   if (course) {
     res.json(course);
   } else {
-    res.status(404).send("Sorry can't find that!");
+    res.status(404).json({ status: "404", message: "Sorry can't find that!" });
   }
 });
 
@@ -38,6 +38,7 @@ router.post("/", passport.authenticate('bearer', { session: false }), (req, res)
 
 router.put("/:id", passport.authenticate('bearer', { session: false }), (req, res) => {
   // TODO: Validar el input
+  // TODO: validar no se puede cambiar el id del curso
   const course = updateCourse(req.params.id, req.body);
   res.json(course);
 });
