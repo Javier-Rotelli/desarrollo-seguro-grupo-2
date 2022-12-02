@@ -27,10 +27,11 @@ export const addCourse = (course) => {
 };
 
 export const updateCourse = (id, course) => {
-  const courseIndex = data.findIndex((c) => c.id === id);
-  data[courseIndex] = course;
-  updateCourses(data);
-  return data[courseIndex];
+  delete course.id
+  const courseIndex = data.findIndex((c) => c.id === id)
+  data[courseIndex] = { ...data[courseIndex], ...course }
+  updateCourses(data)
+  return data[courseIndex]
 };
 
 export const removeCourse = (id) => {
