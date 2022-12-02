@@ -5,6 +5,8 @@ import { join, dirname } from 'path'
 import * as OpenApiValidator from 'express-openapi-validator'
 import swaggerUi from 'swagger-ui-express'
 import YAML from 'yamljs'
+import helmet from "helmet";
+import hpp from "hpp";
 
 import Debug from './debugUtil.js'
 
@@ -23,6 +25,14 @@ const apiSpec = join(dirname('.'), 'api.yml')
 
 // App
 const app = express()
+// headers seguros por default
+app.use(helmet());
+
+// TODO: chequear si seguiria haciendo falta hpp si es que le agregamos un schema con validacion a la API
+// prevenir contaminacion de parametros http
+// https://cheatsheetseries.owasp.org/cheatsheets/Nodejs_Security_Cheat_Sheet.html#prevent-http-parameter-pollution
+app.use(hpp({}));
+
 // reduciendo la informacion que damos
 app.disable("x-powered-by");
 // Body parsers for the supported API payloads
