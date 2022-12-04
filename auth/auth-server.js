@@ -4,12 +4,7 @@ import jwt from 'jsonwebtoken'
 import { getUser, verifyPassword } from '../users/db.js'
 import { getClient, verifySecret } from '../clients/db.js'
 import { saveToken } from '../tokens/db.js'
-
-if (!process.env.JWT_RS256_PRIV_B64) {
-  console.error(`ERROR! Please configure the JWT_RS256_PRIV_B64 env var with an base64 encoded RS256 private key.`)
-  throw new Error('Setup env var JWT_RS256_PRIV_B64 env var with an base64 encoded RS256 private key')
-}
-const privateKey = Buffer.from(process.env.JWT_RS256_PRIV_B64, 'base64').toString('ascii')
+import KeyMgr from './KeyMgr.js'
 
 const authServer = oauth2orize.createServer()
 
@@ -45,7 +40,7 @@ authServer.exchange(
 const makeToken = (payload, expiresIn) => jwt.sign(
   payload,
   // sign with RSA SHA256
-  privateKey,
+  KeyMgr.getPriKey(),
   { algorithm: 'RS256', expiresIn }
 )
 
