@@ -1,0 +1,371 @@
+---
+openapi: 3.0.0
+info:
+  title: Courses API
+  version: 1.0.0
+servers:
+- url: http://localhost:8080
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    UUID:
+      type: string
+      pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      # the regex above limits the length;
+      # however, some tools might require explicit settings:
+      minLength: 36
+      maxLength: 36
+    Error:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+    CourseInput:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 1000
+        initDate:
+          type: string
+          format: date-time
+        enrolled:
+          type: integer
+          minimum: 0
+          maximum: 1000
+    Course:
+      allOf:
+        - $ref: "#/components/schemas/CourseInput"
+        - type: object
+          required:
+          - id
+          - name
+          properties:
+            id:
+              type: string
+              description: Course entity ID
+              $ref: "#/components/schemas/UUID"
+
+    Client:
+      type: object
+      required:
+      - clientId
+      - app
+      - username
+      - clientSecret
+      properties:
+        clientId:
+          type: string
+          description: Client id
+          format: uuid
+        clientSecret:
+          type: string
+          description: the client's password
+        username:
+          type: string
+          description: The username of the user who created/authorized the client credential
+        app:
+          type: string
+          description: The name that the user gave to this client secret.
+    TokenResourceOwnerPasswordBody:
+      type: object
+      required:
+      - grant_type
+      - username
+      - password
+      properties:
+        grant_type:
+          type: string
+          enum:
+          - password
+          description: Defines we are initiating the Resource Owner Password oauth flow
+        username:
+          type: string
+          description: the user's username
+        password:
+          type: string
+    TokenClientCredentialsBody:
+      type: object
+      required:
+      - grant_type
+      - client_id
+      - client_secret
+      properties:
+        grant_type:
+          type: string
+          enum:
+          - client_credentials
+          description: Defines we are initiating the Client Credentials oauth flow
+        client_id:
+          description: the client's id
+          type: string
+          $ref: "#/components/schemas/UUID"
+        client_secret:
+          type: string
+
+  responses:
+    SuccessResponse:
+      description: Success on request
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - status
+            properties:
+              status:
+                type: string
+    BadRequest:
+      description: Bad request. Some field is missing, or is invalid
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    # ResourceAlreadyExists:
+    #   description: Resource already exists
+    #   content:
+    #     application/json:
+    #       schema:
+    #         $ref: "#/components/schemas/Error"
+    CoursesResponse:
+      description: All courses
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/Course"
+    CourseResponse:
+      description: A Course
+      content:
+        application/json:
+          schema:
+            type: object
+            $ref: "#/components/schemas/Course"
+    ClientResponse:
+      description: The new client
+      content:
+        application/json:
+          schema:
+            allOf:
+            - $ref: "#/components/schemas/Client"
+            - type: object
+              properties:
+                plainSecret:
+                  type: string
+                  description: The client secret in plain text so the user can configure it on his app. This will be the only time this system exposes this data on this fashion.
+    TokenResourceOwnerPasswordResponse:
+      description: Resource Owner Password response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              access_token:
+                type: string
+                description: JWT signed access token
+              refresh_token:
+                type: string
+                description: JWT refresh token
+              username:
+                type: string
+                description: logged in username
+              token_type:
+                enum:
+                - Bearer
+    TokenClientCredentialsResponse:
+      description: Client Credentials response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              access_token:
+                type: string
+                description: JWT signed access token
+              refresh_token:
+                type: string
+                description: JWT refresh token
+              clientId:
+                type: string
+                $ref: "#/components/schemas/UUID"
+                description: logged in client id
+              token_type:
+                enum:
+                - Bearer
+security: # applies security to all operations unless they are marked as security: []
+- bearerAuth: []
+paths:
+  "/":
+    head:
+      description: Server healthcheck
+      security: []
+      responses:
+        "200":
+          description: HTTP healthcheck
+    get:
+      description: Server status
+      security: []
+      responses:
+        200:
+          description: HTTP Server status info
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  version:
+                    type: string
+
+  "/Client":
+    post:
+      description: Create a new client app id and secret
+      requestBody:
+        description: New Client
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                app:
+                  type: string
+                  minLength: 0
+                  maxLength: 1000
+      responses:
+        200:
+          description: New course added correctly
+          content:
+            applicaiton/json:
+              schema:
+                $ref: "#/components/responses/ClientResponse"
+
+  "/Course":
+    get:
+      description: Get all courses
+      responses:
+        200:
+          description: An array with all courses
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/CoursesResponse"
+    post:
+      description: Create a new course
+      requestBody:
+        description: New Course
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CourseInput"
+      responses:
+        200:
+          description: New course added correctly
+          content:
+            applicaiton/json:
+              schema:
+                $ref: "#/components/responses/CourseResponse"
+
+
+  "/Course/{id}":
+    get:
+      description: Get a course by id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            $ref: "#/components/schemas/UUID"
+      responses:
+        200:
+          description: The course with that id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/CourseResponse"
+        404:
+          description: No course for that id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/NotFound"
+    delete:
+      description: Delete a course by id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            $ref: "#/components/schemas/UUID"
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/SuccessResponse"
+    put:
+      description: Modify a course by id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            $ref: "#/components/schemas/UUID"
+      requestBody:
+        description: Modifications spec for modifying the course
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Course"
+      responses:
+        200:
+          description: The modified course
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/CourseResponse"
+  "/token":
+    post:
+      description: Initialize the Resource Owner Password or Client Credentials OAUTH Flows.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              anyOf:
+                - $ref: "#/components/schemas/TokenResourceOwnerPasswordBody"
+                - $ref: "#/components/schemas/TokenClientCredentialsBody"
+      responses:
+        200:
+          description: The course with that id
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - $ref: "#/components/responses/TokenResourceOwnerPasswordResponse"
+                  - $ref: "#/components/responses/TokenClientCredentialsResponse"
+tags: []
