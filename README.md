@@ -2,34 +2,30 @@
 
 ## SETUP
 
-### Install
+### Claves de encriptado
+
+El JWT de la API es firma utilizando una clave privada que es necesario configurar antes de
+arrancar el servidor.
+
+Los detalles sobre la configuracion de la clave estan en el archivo `keys/README.md`
+
+### Docker
+
+Guardar las claves y certificados en su directorio y buildear la imagen.
+
+La imagen expone el puerto 8080 con https.
+
+### Local
+
+#### Install
 
 ```
 npm install
 ```
 
-### Claves RSA para firmar el JWT
 
-**Dejar passphrase en blanco!**
 
-#### Clave privada
-```
-ssh-keygen -t rsa -b 4096 -m PEM -f jwtRS256.key
-```
-
-#### Clave publica
-```
-openssl rsa -in jwtRS256.key -pubout -outform PEM -out jwtRS256.key.pub
-```
-
-#### Guardar las claves en el archivo .env encodeadas en base64
-
-```
-cat jwtRS256.key | base64 | sed 's/^/JWT_RS256_PRIV_B64="/' | sed 's/$/"/' >> .env
-cat jwtRS256.key.pub | base64 | sed 's/^/JWT_RS256_PUB_B64="/' | sed 's/$/"/' >> .env
-```
-
-## RUN
+#### RUN
 
 ```
 npm start
@@ -49,7 +45,14 @@ Open `http://localhost:8080/api-docs`
 
 Import `Courses.postman_collection.json` on postman.
 
+### Permitir Certificado Self-Signed
+
+Hay que abrir la configuracion de Postman y cambiar la opcion de validacion de certificado, de lo contrario los pedidos de Postman no se enviaran.
+
+La otra opcion seria hacer que el sistema operativo confie en el certificado auto firmado de la api de cursos meidante una configuracion que depende del sistema operativo en uso.
+
+
 ## TODO
 - [x] validar inputs
-- [ ] revisar el dockerfile, encontrar una imagen con menos vulnerabilidades
+- [x] revisar el dockerfile, encontrar una imagen con menos vulnerabilidades
 - [x] meter un action en el repo que escanee el dockerfile?

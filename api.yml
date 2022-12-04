@@ -4,7 +4,7 @@ info:
   title: Courses API
   version: 1.0.0
 servers:
-- url: http://localhost:8080
+- url: https://localhost:8080
 components:
   securitySchemes:
     bearerAuth:
@@ -107,6 +107,7 @@ components:
           type: string
           $ref: "#/components/schemas/UUID"
         client_secret:
+          description: This should be the plainSecret obtained from POST /Client. The clientSecret porperty in that response is hashed as stored in DB so it won't work!
           type: string
 
   responses:
@@ -347,9 +348,26 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/responses/CourseResponse"
+  "/jwtpubkey":
+    get:
+      description: Get the base 64 encoded public key used to signthe jwt to verify authenticity of jwt.
+      security: []
+      responses:
+        200:
+          description: returns an object with the b64 pub key in a prop
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jwtpubkeyB64:
+                    type: string
+
   "/token":
     post:
       description: Initialize the Resource Owner Password or Client Credentials OAUTH Flows.
+        NOTE! If you are tring Client Credentials be sure to pass the plainSecret you obtained from
+        the POST /Client endpoint, not clientSecret BUT plainSecret.
       security: []
       requestBody:
         required: true
