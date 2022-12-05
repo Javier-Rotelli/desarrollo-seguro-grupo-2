@@ -49,6 +49,9 @@ Import `Courses.postman_collection.json` on postman.
 
 Hay que abrir la configuracion de Postman y cambiar la opcion de validacion de certificado, de lo contrario los pedidos de Postman no se enviaran.
 
+![dev](https://user-images.githubusercontent.com/1416695/205656729-40189d9d-8298-46a0-8d92-25c376c8e42d.gif)
+
+
 La otra opcion seria hacer que el sistema operativo confie en el certificado auto firmado de la api de cursos meidante una configuracion que depende del sistema operativo en uso.
 
 
