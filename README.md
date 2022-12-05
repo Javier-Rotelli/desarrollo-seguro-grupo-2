@@ -53,6 +53,19 @@ Hay que abrir la configuracion de Postman y cambiar la opcion de validacion de c
 
 La otra opcion seria hacer que el sistema operativo confie en el certificado auto firmado de la api de cursos meidante una configuracion que depende del sistema operativo en uso.
 
+## SOLUCION DE PROBLEMAS
+
+### KeyMgr error
+
+Si al intentar levantar el servidor ocurre el siguiente error
+
+```
+KeyMgr error
+```
+
+El problema se soluciona revisando que los archivos de keys y de certs se encuentren en los directorios correspondientes y que los archivos tengan el nombre que corresponde.
+
+Para revisar estos datos se puede consultar este mismo README.md o el de ./keys/README.md y ./certs/README.md
 
 ## TODO
 - [x] validar inputs
