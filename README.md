@@ -17,33 +17,32 @@ La imagen expone el puerto 8080 con https.
 
 ### Local
 
-#### Install
+#### Instalar
 
 ```
 npm install
 ```
 
 
-
-#### RUN
+#### EJECUTAR
 
 ```
 npm start
 ```
 
-or using debug log level
+o usando el log de debug:
 
 ```
 DEBUG=course:* npm start
 ```
 
-## READ API DOCS
+## API DOCS
 
-Open `http://localhost:8080/api-docs`
+Levantar el server y abrir en el navegador: `https://localhost:8080/api-docs`
 
-## TEST WITH POSTMAN
+## PROBAR CON POSTMAN
 
-Import `Courses.postman_collection.json` on postman.
+Importar `Courses.postman_collection.json` con postman.
 
 ### Permitir Certificado Self-Signed
 
