@@ -25,19 +25,19 @@ db.createCollection("courses");
 
 db.courses.insertMany([
   {
-    _id: "de47e087-4736-4733-ad67-12f71371636e",
+    _id: "de47e08747364733ad6712f7",
     name: "Diplomatura Desarrollo Seguro de App - 2da. edición",
     initDate: "2022-08-20T03:00:00.000Z",
     enrolled: 25,
   },
   {
-    _id: "4708ab93-854c-49ef-ae38-151dfc5196ff",
+    _id: "4708ab93854c49efae38151d",
     name: "Diplomatura Desarrollo Seguro de App - 1da. edición",
     initDate: "2022-03-05T03:00:00.000Z",
     enrolled: 50,
   },
   {
-    _id: "e3ade20f-5dad-4573-9fa1-9b92cbb7b0d5",
+    _id: "e3ade20f5dad45739fa19b92",
     name: "Diplomatura Desarrollo Seguro de App - 3ra. edición",
     initDate: "2023-03-05T03:00:00.000Z",
     enrolled: 0,
@@ -59,7 +59,7 @@ db.createCollection("users");
 
 db.users.insertMany([
   {
-    _id: "1611d4cb-6d06-47c2-a651-b2b26ce798ba",
+    _id: "1611d4cb6d0647c2a651b2b2",
     username: "rfort",
     password: "$2b$10$2jbjk2fZm9dIwkSfpTDKZuWYcOj4pMzEemIMwdtUNVq3IqvgJgVAa",
     name: "Ricardo",
