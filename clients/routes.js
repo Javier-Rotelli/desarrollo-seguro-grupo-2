@@ -1,18 +1,22 @@
-import express from 'express'
-import passport from 'passport'
+import express from "express";
+import passport from "passport";
 
-import { createClient } from './db.js'
+import { createClient } from "./db.js";
 
-const router = express.Router()
+const router = express.Router();
 
 // creates a new client for this user
-router.post('/',
-  passport.authenticate('bearer', { session: false }),
-  (req, res) => {
-    const { newClient, plainSecret } = createClient(req.user.username, req.body.app)
+router.post(
+  "/",
+  passport.authenticate("bearer", { session: false }),
+  async (req, res) => {
+    const { newClient, plainSecret } = await createClient(
+      req.user.username,
+      req.body.app
+    );
 
-    res.json({ ...newClient, plainSecret })
+    res.json({ ...newClient, plainSecret });
   }
-)
+);
 
-export default router
+export default router;

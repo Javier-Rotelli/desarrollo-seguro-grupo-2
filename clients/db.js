@@ -1,23 +1,32 @@
-import { readFileSync, writeFileSync } from 'fs'
+import { hash, compare, apiSecret, uuid } from "../cryptoUtil.js";
+import mongoose from "mongoose";
 
-import { hash, compare, apiSecret, uuid } from '../cryptoUtil.js'
+const clientSchema = new mongoose.Schema({
+  username: String,
+  clientId: String,
+  app: String,
+  clientSecret: String,
+});
 
-const CLIENTS_FILE = 'data/clients.json'
-const clients = JSON.parse(readFileSync(CLIENTS_FILE, 'utf8'))
+const Client = mongoose.model("client", clientSchema);
 
-export const getClient = (clientId) => {
-  return clients.find(client => client.clientId === clientId)
-}
+export const getClient = async (clientId) => {
+  return Client.findOne({ clientId: clientId }).exec();
+};
 
-export const createClient = (username, app) => {
-  const plainSecret = apiSecret()
-  const newClient = { username, app, clientId: uuid(), clientSecret: hash(plainSecret) }
-  clients.push(newClient)
-  writeFileSync(CLIENTS_FILE, JSON.stringify(clients, null, "\t"))
-  return { newClient, plainSecret }
-}
+export const createClient = async (username, app) => {
+  const plainSecret = apiSecret();
+  const newClient = new Client({
+    username,
+    app,
+    clientId: uuid(),
+    clientSecret: hash(plainSecret),
+  });
+  await newClient.save();
+  return { newClient: newClient.toObject(), plainSecret };
+};
 
-export const verifySecret = (clientId, clientSecret) => {
-  const client = getClient(clientId)
-  return client && compare(clientSecret, client.clientSecret)
-}
+export const verifySecret = async (clientId, clientSecret) => {
+  const client = await getClient(clientId);
+  return client !== null && compare(clientSecret, client.clientSecret);
+};
