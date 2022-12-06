@@ -59,7 +59,7 @@ db.createCollection("users");
 
 db.users.insertMany([
   {
-    _id: "1611d4cb-6d06-47c2-a651-b2b26ce798ba",
+    _id: "1611d4cb6d0647c2a651b2b2",
     username: "rfort",
     password: "$2b$10$2jbjk2fZm9dIwkSfpTDKZuWYcOj4pMzEemIMwdtUNVq3IqvgJgVAa",
     name: "Ricardo",

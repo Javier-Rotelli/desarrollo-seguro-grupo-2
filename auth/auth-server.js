@@ -22,9 +22,9 @@ const authServer = oauth2orize.createServer();
 
 authServer.exchange(
   oauth2orize.exchange.password(
-    (client, username, passwd, scope, reqBody, reqAuthInfo, issued) => {
-      const user = getUser(username);
-      if (!user || !verifyPassword(username, passwd))
+    async (client, username, passwd, scope, reqBody, reqAuthInfo, issued) => {
+      const user = await getUser(username);
+      if (!user || !(await verifyPassword(username, passwd)))
         return issued(null, false);
 
       issueTokens({ username }, issued);
@@ -85,8 +85,8 @@ authServer.serializeClient((clientOrUser, done) => {
   return done(null, clientOrUser.clientId);
 });
 
-authServer.deserializeClient((identifier, done) => {
-  const maybeUser = getUser(identifier);
+authServer.deserializeClient(async (identifier, done) => {
+  const maybeUser = await getUser(identifier);
   if (maybeUser) return done(null, maybeUser);
 
   const maybeClient = getClient(identifier);
