@@ -17,40 +17,55 @@ La imagen expone el puerto 8080 con https.
 
 ### Local
 
-#### Install
+#### Instalar
 
 ```
 npm install
 ```
 
 
-
-#### RUN
+#### EJECUTAR
 
 ```
 npm start
 ```
 
-or using debug log level
+o usando el log de debug:
 
 ```
 DEBUG=course:* npm start
 ```
 
-## READ API DOCS
+## API DOCS
 
-Open `http://localhost:8080/api-docs`
+Levantar el server y abrir en el navegador: `https://localhost:8080/api-docs`
 
-## TEST WITH POSTMAN
+## PROBAR CON POSTMAN
 
-Import `Courses.postman_collection.json` on postman.
+Importar `Courses.postman_collection.json` con postman.
 
 ### Permitir Certificado Self-Signed
 
 Hay que abrir la configuracion de Postman y cambiar la opcion de validacion de certificado, de lo contrario los pedidos de Postman no se enviaran.
 
+![dev](https://user-images.githubusercontent.com/1416695/205656729-40189d9d-8298-46a0-8d92-25c376c8e42d.gif)
+
+
 La otra opcion seria hacer que el sistema operativo confie en el certificado auto firmado de la api de cursos meidante una configuracion que depende del sistema operativo en uso.
 
+## SOLUCION DE PROBLEMAS
+
+### KeyMgr error
+
+Si al intentar levantar el servidor ocurre el siguiente error
+
+```
+KeyMgr error
+```
+
+El problema se soluciona revisando que los archivos de keys y de certs se encuentren en los directorios correspondientes y que los archivos tengan el nombre que corresponde.
+
+Para revisar estos datos se puede consultar este mismo README.md o el de ./keys/README.md y ./certs/README.md
 
 ## TODO
 - [x] validar inputs

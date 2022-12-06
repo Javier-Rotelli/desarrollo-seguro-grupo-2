@@ -38,7 +38,6 @@ router.post("/", passport.authenticate('bearer', { session: false }), (req, res)
 });
 
 router.put("/:id", passport.authenticate('bearer', { session: false }), (req, res) => {
-  // TODO: validar no se puede cambiar el id del curso
   const id = sanitizer.value(req.params.id, 'string');
   const course = new Course(req.body);
   const updatedCourse = new Course(updateCourse(id, course));

@@ -18,7 +18,7 @@ class KeyMgr {
       this.certkey = readFileSync(CERT_KEY_PATH, { encoding: 'utf-8' })
       console.info(`Cert and cert key ok.`)
     } catch(e) {
-      throw new Error(`ERROR: Reading public and private keys files. Those should be on the ./keys directory with a specific name check README.md and keys/README.md\nerr: ${e.message}\nstack: ${e.stack}`)
+      throw new Error(`KeyMgr error`)
     }
   }
 
