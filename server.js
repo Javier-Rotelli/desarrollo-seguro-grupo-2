@@ -1,23 +1,23 @@
 "use strict";
 
-import express from 'express'
-import https from 'https'
-import { join, dirname } from 'path'
-import * as OpenApiValidator from 'express-openapi-validator'
-import swaggerUi from 'swagger-ui-express'
-import YAML from 'yamljs'
+import express from "express";
+import https from "https";
+import { join, dirname } from "path";
+import * as OpenApiValidator from "express-openapi-validator";
+import swaggerUi from "swagger-ui-express";
+import YAML from "yamljs";
 import helmet from "helmet";
 import hpp from "hpp";
 
-import apiAuth from './auth/api-auth.js';
-import KeyMgr from './auth/KeyMgr.js';
+import apiAuth from "./auth/api-auth.js";
+import KeyMgr from "./auth/KeyMgr.js";
 
 import courseRouter from "./courses/routes.js";
 import clientRouter from "./clients/routes.js";
 import { getDB } from "./dbUtil.js";
 
-import Debug from './debugUtil.js'
-const debug = Debug('server')
+import Debug from "./debugUtil.js";
+const debug = Debug("server");
 
 // Constants
 const PORT = 8080;
@@ -79,18 +79,20 @@ app.use("/Client", clientRouter);
 
 await getDB();
 
-KeyMgr.init()
+KeyMgr.init();
 
-const server = https.createServer(
-  {
-    key: KeyMgr.getCertKey(),
-    cert: KeyMgr.getCert()
-  },
-  app
-).listen(PORT, HOST, () => {
-  console.info(`Running on https://${HOST}:${PORT} with TLS`)
-})
+const server = https
+  .createServer(
+    {
+      key: KeyMgr.getCertKey(),
+      cert: KeyMgr.getCert(),
+    },
+    app
+  )
+  .listen(PORT, HOST, () => {
+    console.info(`Running on https://${HOST}:${PORT} with TLS`);
+  });
 
-server.on('error', e => {
-  console.error('error server: ', e.code, e.message)
-})
+server.on("error", (e) => {
+  console.error("error server: ", e.code, e.message);
+});

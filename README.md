@@ -20,8 +20,8 @@ docker-compose up -d
 
 Inicia dos contenedores:
 
-* nodejs: que es la api de courses expuesta en el puerto `8080` del host. Este puerto **es un puerto seguro** con lo que hay que utilizar el scheme `https` para acceder.
-* mongo: es la base de datos, no expone ningun puerto hacia el host.
+- nodejs: que es la api de courses expuesta en el puerto `8080` del host. Este puerto **es un puerto seguro** con lo que hay que utilizar el scheme `https` para acceder.
+- mongo: es la base de datos, no expone ningun puerto hacia el host.
 
 ## API DOCS
 
@@ -36,7 +36,6 @@ Importar la coleccion `Courses.postman_collection.json` en postman, hay que desh
 Hay que abrir la configuracion de Postman y cambiar la opcion de validacion de certificado, de lo contrario los pedidos de Postman no se enviaran.
 
 ![dev](https://user-images.githubusercontent.com/1416695/205656729-40189d9d-8298-46a0-8d92-25c376c8e42d.gif)
-
 
 La otra opcion seria hacer que el sistema operativo confie en el certificado auto firmado de la api de cursos meidante una configuracion que depende del sistema operativo en uso.
 
@@ -84,7 +83,6 @@ La imagen expone el puerto 8080 con https.
 ```
 npm install
 ```
-
 
 #### EJECUTAR
 

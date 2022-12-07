@@ -4,7 +4,7 @@ info:
   title: Courses API
   version: 1.0.0
 servers:
-- url: https://localhost:8080
+  - url: https://localhost:8080
 components:
   securitySchemes:
     bearerAuth:
@@ -44,8 +44,8 @@ components:
         - $ref: "#/components/schemas/CourseInput"
         - type: object
           required:
-          - id
-          - name
+            - id
+            - name
           properties:
             id:
               type: string
@@ -55,10 +55,10 @@ components:
     Client:
       type: object
       required:
-      - clientId
-      - app
-      - username
-      - clientSecret
+        - clientId
+        - app
+        - username
+        - clientSecret
       properties:
         clientId:
           type: string
@@ -76,14 +76,14 @@ components:
     TokenResourceOwnerPasswordBody:
       type: object
       required:
-      - grant_type
-      - username
-      - password
+        - grant_type
+        - username
+        - password
       properties:
         grant_type:
           type: string
           enum:
-          - password
+            - password
           description: Defines we are initiating the Resource Owner Password oauth flow
         username:
           type: string
@@ -93,14 +93,14 @@ components:
     TokenClientCredentialsBody:
       type: object
       required:
-      - grant_type
-      - client_id
-      - client_secret
+        - grant_type
+        - client_id
+        - client_secret
       properties:
         grant_type:
           type: string
           enum:
-          - client_credentials
+            - client_credentials
           description: Defines we are initiating the Client Credentials oauth flow
         client_id:
           description: the client's id
@@ -118,7 +118,7 @@ components:
           schema:
             type: object
             required:
-            - status
+              - status
             properties:
               status:
                 type: string
@@ -167,12 +167,12 @@ components:
         application/json:
           schema:
             allOf:
-            - $ref: "#/components/schemas/Client"
-            - type: object
-              properties:
-                plainSecret:
-                  type: string
-                  description: The client secret in plain text so the user can configure it on his app. This will be the only time this system exposes this data on this fashion.
+              - $ref: "#/components/schemas/Client"
+              - type: object
+                properties:
+                  plainSecret:
+                    type: string
+                    description: The client secret in plain text so the user can configure it on his app. This will be the only time this system exposes this data on this fashion.
     TokenResourceOwnerPasswordResponse:
       description: Resource Owner Password response
       content:
@@ -191,7 +191,7 @@ components:
                 description: logged in username
               token_type:
                 enum:
-                - Bearer
+                  - Bearer
     TokenClientCredentialsResponse:
       description: Client Credentials response
       content:
@@ -211,9 +211,9 @@ components:
                 description: logged in client id
               token_type:
                 enum:
-                - Bearer
+                  - Bearer
 security: # applies security to all operations unless they are marked as security: []
-- bearerAuth: []
+  - bearerAuth: []
 paths:
   "/":
     head:
@@ -287,7 +287,6 @@ paths:
             applicaiton/json:
               schema:
                 $ref: "#/components/responses/CourseResponse"
-
 
   "/Course/{id}":
     get:
@@ -365,7 +364,8 @@ paths:
 
   "/token":
     post:
-      description: Initialize the Resource Owner Password or Client Credentials OAUTH Flows.
+      description:
+        Initialize the Resource Owner Password or Client Credentials OAUTH Flows.
         NOTE! If you are tring Client Credentials be sure to pass the plainSecret you obtained from
         the POST /Client endpoint, not clientSecret BUT plainSecret.
       security: []

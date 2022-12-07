@@ -24,9 +24,9 @@ router.get(
   "/:id",
   passport.authenticate("bearer", { session: false }),
   async (req, res) => {
-    const id = sanitizer.value(req.params.id, 'string');
+    const id = sanitizer.value(req.params.id, "string");
     const courseModel = await getCourse(id);
-    const course = new Course(courseModel)
+    const course = new Course(courseModel);
 
     if (course) {
       res.json(course);
@@ -53,7 +53,7 @@ router.put(
   "/:id",
   passport.authenticate("bearer", { session: false }),
   async (req, res) => {
-    const id = sanitizer.value(req.params.id, 'string');
+    const id = sanitizer.value(req.params.id, "string");
     const course = new Course(req.body);
     const courseModel = await updateCourse(id, course);
     res.json(new Course(courseModel));
@@ -64,7 +64,7 @@ router.delete(
   "/:id",
   passport.authenticate("bearer", { session: false }),
   async (req, res) => {
-    const id = sanitizer.value(req.params.id, 'string');
+    const id = sanitizer.value(req.params.id, "string");
     await removeCourse(id);
     return res.json({ status: "ok" });
   }
