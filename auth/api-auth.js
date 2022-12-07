@@ -17,6 +17,8 @@ const redactClient = (client) => {
   return client;
 };
 
+const isTokenExpired = ({ exp }) => new Date().getTime() >= exp * 1000
+
 // setup api auth
 export default (app) => {
   app.post(
@@ -42,7 +44,7 @@ export default (app) => {
   passport.use(
     new BearerStrategy(async (accessToken, done) => {
       const token = await getToken(accessToken);
-      if (!token) return done(null, false);
+      if (!token || isTokenExpired(token)) return done(null, false);
 
       if (token.username) {
         const maybeUser = getUser(token.username);
