@@ -62,7 +62,7 @@ db.users.insertMany([
     _id: "1611d4cb6d0647c2a651b2b2",
     username: "rfort",
     password: "$2b$10$2jbjk2fZm9dIwkSfpTDKZuWYcOj4pMzEemIMwdtUNVq3IqvgJgVAa",
-    name: "Ricardo",
+    name: "Raul",
     surname: "Fortunato",
     age: 39,
   },
