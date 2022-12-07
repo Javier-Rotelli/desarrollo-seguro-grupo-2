@@ -22,4 +22,5 @@ COPY . .
 RUN chown -R node:node .
 USER node
 EXPOSE 8080
+# will be overwritten when running docker-compose
 CMD [ "node", "server.js" ]
