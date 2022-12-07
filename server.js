@@ -77,7 +77,7 @@ app.get("/", (req, res) => {
 app.use("/Course", courseRouter);
 app.use("/Client", clientRouter);
 
-const db = getDB();
+await getDB();
 
 app.listen(PORT, HOST, () => {
   console.log(`Running on http://${HOST}:${PORT}`);

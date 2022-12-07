@@ -1,5 +1,9 @@
 import mongoose from "mongoose";
 
+import Debug from './debugUtil.js'
+
+const debug = Debug('db')
+
 // supressing mongo warning
 mongoose.set("strictQuery", false);
 
@@ -15,8 +19,9 @@ export const getDB = async () => {
   const port = process.env.MONGO_PORT || 27017;
   const db = process.env.MONGO_DB;
 
-  dbConnection = await mongoose.connect(
-    `mongodb://${username}:${password}@${host}:${port}/${db}`
-  );
+  const url = `mongodb://${username}:${password}@${host}:${port}/${db}`
+  debug(`DB connecting to ${url}`)
+  dbConnection = await mongoose.connect(url);
+  debug('connection established')
   return dbConnection;
 };
