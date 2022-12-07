@@ -110,6 +110,6 @@ DEBUG=course:* npm start
 
 ## TODO
 
-[x] Preparar documento para enviar
-[ ] Preparar archivos para enviar: keys, certs, .env (o en gdrive)
-[ ] Probar todo completo usando la collection de postman desde el repo.
+- [x] Preparar documento para enviar
+- [ ] Preparar archivos para enviar: keys, certs, .env (o en gdrive)
+- [ ] Probar todo completo usando la collection de postman desde el repo.
