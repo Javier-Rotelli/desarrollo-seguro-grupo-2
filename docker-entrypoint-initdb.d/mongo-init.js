@@ -1,3 +1,4 @@
+/*global db*/
 db.createUser({
   user: process.env.MONGO_USERNAME,
   pwd: process.env.MONGO_PASSWORD,
