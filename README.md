@@ -2,6 +2,8 @@
 
 ## SETUP
 
+Tener docker instalado y ejecutando.
+
 Los archivos `https.cert` y `https.key` van en el directorio `certs`
 
 Los archivos `jwtRS256.key` y `jwtRS256.key.pub` van en el directorio `keys`
