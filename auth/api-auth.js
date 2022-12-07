@@ -1,3 +1,4 @@
+import { readFileSync } from 'fs'
 import passport from 'passport'
 import { Strategy as BearerStrategy } from 'passport-http-bearer'
 import { Strategy as ClientCredentialsStrategy } from 'passport-oauth2-client-password'
@@ -7,6 +8,7 @@ import limiter from '../ratelimit/limiter.js'
 import { getClient, verifySecret } from '../clients/db.js'
 import { getToken } from '../tokens/db.js'
 import { getUser } from '../users/db.js'
+import KeyMgr from './KeyMgr.js'
 
 const redactUser = user => {
   delete user.password
@@ -20,6 +22,9 @@ const redactClient = client => {
 // setup api auth
 export default app => {
 
+  app.get('/jwtpubkey', (req, res) => {
+    res.json({ jwtpubkeyB64: KeyMgr.getPubKeyB64() })
+  })
   app.post("/token",
     limiter, // rate limit this endpoint
     authServer.token(),
