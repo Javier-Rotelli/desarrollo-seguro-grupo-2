@@ -7,6 +7,8 @@ import {
   updateCourse,
 } from "./db.js";
 import passport from "passport";
+import sanitizer from "sanitize";
+import { Course } from "./entities/course.js";
 
 const router = express.Router();
 
@@ -22,7 +24,9 @@ router.get(
   "/:id",
   passport.authenticate("bearer", { session: false }),
   async (req, res) => {
-    const course = await getCourse(req.params.id);
+    const id = sanitizer.value(req.params.id, 'string');
+    const courseModel = await getCourse(id);
+    const course = new Course(courseModel)
 
     if (course) {
       res.json(course);
@@ -38,7 +42,7 @@ router.post(
   "/",
   passport.authenticate("bearer", { session: false }),
   async (req, res) => {
-    const course = req.body;
+    const course = new Course(req.body);
     const savedCourse = await addCourse(course);
 
     res.json(savedCourse);
@@ -49,8 +53,10 @@ router.put(
   "/:id",
   passport.authenticate("bearer", { session: false }),
   async (req, res) => {
-    const course = await updateCourse(req.params.id, req.body);
-    res.json(course);
+    const id = sanitizer.value(req.params.id, 'string');
+    const course = new Course(req.body);
+    const courseModel = await updateCourse(id, course);
+    res.json(new Course(courseModel));
   }
 );
 
@@ -58,7 +64,8 @@ router.delete(
   "/:id",
   passport.authenticate("bearer", { session: false }),
   async (req, res) => {
-    await removeCourse(req.params.id);
+    const id = sanitizer.value(req.params.id, 'string');
+    await removeCourse(id);
     return res.json({ status: "ok" });
   }
 );

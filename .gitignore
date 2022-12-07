@@ -1,7 +1,8 @@
 .env
-*.key
-*.key.pub
-*.cert
+keys/*.key
+keys/*.key.pub
+certs/*.key
+certs/*.cert
 
 # Logs
 logs

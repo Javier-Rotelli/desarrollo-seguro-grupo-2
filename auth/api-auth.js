@@ -7,22 +7,26 @@ import limiter from "../ratelimit/limiter.js";
 import { getClient, verifySecret } from "../clients/db.js";
 import { getToken } from "../tokens/db.js";
 import { getUser } from "../users/db.js";
+import KeyMgr from "./KeyMgr.js";
 
-const redactUser = (user) => {
+const redactUser = user => {
   delete user.password;
-  return user;
-};
-const redactClient = (client) => {
+  return user
+}
+const redactClient = client => {
   delete client.clientSecret;
-  return client;
-};
+  return client
+}
 
 const isTokenExpired = ({ exp }) => new Date().getTime() >= exp * 1000
 
 // setup api auth
-export default (app) => {
-  app.post(
-    "/token",
+export default app => {
+
+  app.get('/jwtpubkey', (req, res) => {
+    res.json({ jwtpubkeyB64: KeyMgr.getPubKeyB64() })
+  })
+  app.post("/token",
     limiter, // rate limit this endpoint
     authServer.token(),
     authServer.errorHandler()

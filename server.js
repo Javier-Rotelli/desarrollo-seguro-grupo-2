@@ -1,22 +1,23 @@
 "use strict";
 
-import express from "express";
-import { join, dirname } from "path";
-import * as OpenApiValidator from "express-openapi-validator";
-import swaggerUi from "swagger-ui-express";
-import YAML from "yamljs";
+import express from 'express'
+import https from 'https'
+import { join, dirname } from 'path'
+import * as OpenApiValidator from 'express-openapi-validator'
+import swaggerUi from 'swagger-ui-express'
+import YAML from 'yamljs'
 import helmet from "helmet";
 import hpp from "hpp";
 
-import Debug from "./debugUtil.js";
-
-import apiAuth from "./auth/api-auth.js";
+import apiAuth from './auth/api-auth.js';
+import KeyMgr from './auth/KeyMgr.js';
 
 import courseRouter from "./courses/routes.js";
 import clientRouter from "./clients/routes.js";
 import { getDB } from "./dbUtil.js";
 
-const debug = Debug("server");
+import Debug from './debugUtil.js'
+const debug = Debug('server')
 
 // Constants
 const PORT = 8080;
@@ -29,7 +30,6 @@ const app = express();
 // headers seguros por default
 app.use(helmet());
 
-// TODO: chequear si seguiria haciendo falta hpp si es que le agregamos un schema con validacion a la API
 // prevenir contaminacion de parametros http
 // https://cheatsheetseries.owasp.org/cheatsheets/Nodejs_Security_Cheat_Sheet.html#prevent-http-parameter-pollution
 app.use(hpp({}));
@@ -79,6 +79,18 @@ app.use("/Client", clientRouter);
 
 await getDB();
 
-app.listen(PORT, HOST, () => {
-  console.log(`Running on http://${HOST}:${PORT}`);
-});
+KeyMgr.init()
+
+const server = https.createServer(
+  {
+    key: KeyMgr.getCertKey(),
+    cert: KeyMgr.getCert()
+  },
+  app
+).listen(PORT, HOST, () => {
+  console.info(`Running on https://${HOST}:${PORT} with TLS`)
+})
+
+server.on('error', e => {
+  console.error('error server: ', e.code, e.message)
+})
