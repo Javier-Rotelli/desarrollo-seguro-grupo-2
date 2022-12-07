@@ -15,7 +15,19 @@ El archivo `.env` va en el directorio raiz del repositorio (al mismo nivel que e
 ## EJECUTAR
 
 ```
+docker-compose build
+```
+
+```
 docker-compose up -d
+```
+
+```
+docker-compose logs -f nodejs
+Attaching to nodejs
+nodejs    | Read keys ok.
+nodejs    | Cert and cert key ok.
+nodejs    | Running on https://0.0.0.0:8080 with TLS
 ```
 
 Inicia dos contenedores:
@@ -29,7 +41,7 @@ Abrir `https://localhost:8080/api-docs` para ver la documentacion de la api en `
 
 ## PROBAR CON POSTMAN
 
-Importar la coleccion `Courses.postman_collection.json` en postman, hay que deshabilitar el chequeo de certificados para que sea compatible con el certificado autofirmado incluido.
+Importar la coleccion `Courses.postman_collection.json` que esta en el el directorio raiz del repositorio en postman, hay que deshabilitar el chequeo de certificados para que sea compatible con el certificado autofirmado incluido.
 
 ### Permitir Certificado Self-Signed en POSTMAN
 
