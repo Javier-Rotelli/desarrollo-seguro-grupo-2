@@ -23,6 +23,10 @@ services:
       - MONGO_USERNAME=$MONGO_USERNAME
       - MONGO_PASSWORD=$MONGO_PASSWORD
       - MONGO_DB=$MONGO_DB
+    # Para mayor seguridad mantenemos el acceso a mongodb solo para la red interna de docker-compose
+    # Descomentar las siguientes dos lineas si se quiere acceder a mongodb en el puerto 20718 en el host
+    # ports:
+    #   - '27018:27017'
     restart: always
     volumes:
       - ./data/mongo:/data/db

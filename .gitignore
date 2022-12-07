@@ -1,6 +1,7 @@
 .env
 *.key
 *.key.pub
+*.cert
 
 # Logs
 logs
