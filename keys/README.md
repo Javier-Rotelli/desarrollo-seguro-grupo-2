@@ -2,19 +2,21 @@
 
 Si recibiste las claves guardarlas en este directorio con los siguientes nombres:
 
-* `jwtRS256.key` para la clave privada
-* `jwtRS256.key.pub` para la clave publica
+- `jwtRS256.key` para la clave privada
+- `jwtRS256.key.pub` para la clave publica
 
 Si no las recibiste, o queres usar nuevas claves podes crear unas nuevas asi:
 
 **Dejar passphrase en blanco!**
 
 ## Clave privada
+
 ```
 ssh-keygen -t rsa -b 4096 -m PEM -f jwtRS256.key
 ```
 
 ## Clave publica
+
 ```
 openssl rsa -in jwtRS256.key -pubout -outform PEM -out jwtRS256.key.pub
 ```

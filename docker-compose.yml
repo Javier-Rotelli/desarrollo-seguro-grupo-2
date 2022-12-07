@@ -1,0 +1,47 @@
+version: "3"
+services:
+  nodejs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nodejs
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - MONGO_USERNAME=$MONGO_USERNAME
+      - MONGO_PASSWORD=$MONGO_PASSWORD
+      - MONGO_HOSTNAME=mongo
+      - MONGO_DB=$MONGO_DB
+      - MONGO_PORT=27017 # internal connection with mongodb always through 27017
+    ports:
+      - "8080:8080"
+    depends_on:
+      - "mongo"
+    entrypoint: "/bin/sh"
+    command:
+      [
+        "/usr/src/app/wait-for.sh",
+        "mongo:27017",
+        "--",
+        "node",
+        "/usr/src/app/server.js",
+      ]
+  mongo:
+    image: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=secret
+      - MONGO_INITDB_DATABASE=$MONGO_DB
+      - MONGO_USERNAME=$MONGO_USERNAME
+      - MONGO_PASSWORD=$MONGO_PASSWORD
+      - MONGO_DB=$MONGO_DB
+    # Para mayor seguridad mantenemos el acceso a mongodb solo para la red interna de docker-compose
+    # Descomentar las siguientes dos lineas si se quiere acceder a mongodb en el puerto 20718 en el host
+    # ports:
+    #   - '27018:27017'
+    restart: always
+    volumes:
+      - ./data/mongo:/data/db
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d:ro
+    expose:
+      - 27017 # exposing on the internal network, NOT through the host

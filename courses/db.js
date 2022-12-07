@@ -1,44 +1,31 @@
-import { readFileSync, writeFileSync } from 'fs'
-import { uuid } from '../cryptoUtil.js'
+import mongoose from "mongoose";
 
-const COURSES_FILE = 'data/courses.json'
-const data = JSON.parse(readFileSync(COURSES_FILE, "utf8"));
+const courseSchema = new mongoose.Schema({
+  name: String,
+  initDate: Date,
+  enrolled: Number,
+});
 
-export const getCourses = () => {
-  return data;
+const Course = mongoose.model("course", courseSchema);
+export const getCourses = async () => {
+  return Course.find();
 };
 
-export const getCourse = (id) => {
-  return data.find((course) => course.id === id);
+export const getCourse = async (id) => {
+  return Course.findById(id);
 };
 
-export const updateCourses = (courses) => {
-  writeFileSync(COURSES_FILE, JSON.stringify(courses, null, "\t"));
-};
-
-export const addCourse = (course) => {
-  course = {
-    id: uuid(),
-    ...course,
-  };
-  data.push(course);
-  updateCourses(data);
+export const addCourse = async (course) => {
+  const c = new Course(course);
+  await c.save();
   return course;
 };
 
-export const updateCourse = (id, course) => {
-  delete course.id
-  const courseIndex = data.findIndex((c) => c.id === id)
-  data[courseIndex] = { ...data[courseIndex], ...course }
-  updateCourses(data)
-  return data[courseIndex]
+export const updateCourse = async (id, course) => {
+  delete course._id;
+  return Course.findByIdAndUpdate(id, course);
 };
 
-export const removeCourse = (id) => {
-  const courseIndex = data.findIndex((c) => c.id === id);
-  if (courseIndex > -1) {
-    // only splice array when item is found
-    data.splice(courseIndex, 1); // 2nd parameter means remove one item only
-  }
-  updateCourses(data);
+export const removeCourse = async (id) => {
+  Course.deleteOne({ _id: id });
 };

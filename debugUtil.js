@@ -1,5 +1,5 @@
-import debug from 'debug'
+import debug from "debug";
 
-const debugFn = str => debug(`course:${str}`)
+const debugFn = (str) => debug(`course:${str}`);
 
-export default debugFn
+export default debugFn;

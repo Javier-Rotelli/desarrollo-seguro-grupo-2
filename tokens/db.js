@@ -1,32 +1,34 @@
-import { readFileSync, writeFileSync } from "fs"
+import mongoose from "mongoose";
 
-const TOKENS_FILE = "data/tokens.json"
-const encoding = "utf8"
-const data = () => JSON.parse(readFileSync(TOKENS_FILE, encoding))
+const tokenSchema = new mongoose.Schema({
+  token: String,
+  username: String,
+  iat: Number,
+  exp: Number,
+});
 
-export const getToken = token => {
-  return data().find(some => some.token === token)
-}
+const Token = mongoose.model("token", tokenSchema);
+
+export const getToken = async (token) => {
+  return Token.findOne({ token: token });
+};
 
 const newToken = ({ token, username, clientId }) => {
-  const payload = token.split('.')[1]
-  const { iat, exp } = JSON.parse(Buffer.from(payload, 'base64').toString('utf8'))
+  const payload = token.split(".")[1];
+  const { iat, exp } = JSON.parse(
+    Buffer.from(payload, "base64").toString("utf8")
+  );
   return {
     token,
     username,
     clientId,
     iat,
-    exp
-  }
-}
+    exp,
+  };
+};
 
-const stringifyNicely = x => JSON.stringify(x, null, 2)
-
-export const saveToken = ({ username, clientId }, token) =>
-  writeFileSync(
-    TOKENS_FILE,
-    stringifyNicely(
-      data().concat(newToken({ username, clientId, token }))
-    ),
-    { encoding }
-  )
+export const saveToken = async ({ username, clientId }, token) => {
+  const tk = new Token(newToken({ username, clientId, token }));
+  await tk.save();
+  return tk;
+};

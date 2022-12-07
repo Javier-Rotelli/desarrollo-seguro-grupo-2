@@ -1,303 +1,250 @@
 {
-	"info": {
-		"_postman_id": "caecc5fb-477f-4bb6-8f32-f9874deb3f9f",
-		"name": "Courses",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "16048735"
-	},
-	"item": [
-		{
-			"name": "Health Check",
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "HEAD",
-				"header": [],
-				"url": {
-					"raw": "{{url}}/",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Status",
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{url}}/",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/Course",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{url}}/Course/",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"Course",
-						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/Course",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"name\": \"Diplomatura Desarrollo Seguro de App - 4ta. edición\",\n    \"initDate\": \"2023-03-05T03:00:00.000Z\",\n    \"enrolled\": 19\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{url}}/Course/",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"Course",
-						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/Course/:id",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{url}}/Course/de47e087-4736-4733-ad67-12f71371636e",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"Course",
-						"de47e087-4736-4733-ad67-12f71371636e"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/Course/:id",
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"id\": \"de47e087-4736-4733-ad67-12f71371636e\",\n    \"name\": \"Diplomatura Desarrollo Seguro de App - 2da. edición\",\n    \"initDate\": \"2022-08-20T03:00:00.000Z\",\n    \"enrolled\": 28\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{url}}/Course/de47e087-4736-4733-ad67-12f71371636e",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"Course",
-						"de47e087-4736-4733-ad67-12f71371636e"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/Course/:id",
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"url": {
-					"raw": "{{url}}/Course/b95468b7-796e-470b-b668-e75cbdf833d8",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"Course",
-						"b95468b7-796e-470b-b668-e75cbdf833d8"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get Token with Resource Password Owner",
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\"grant_type\": \"password\", \"username\": \"rfort\", \"password\": \"1234\"}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{url}}/token",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"token"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get Token with Client Credentials",
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\"grant_type\": \"client_credentials\", \"client_id\": \"43dd1932-2618-4d6b-9faa-0038910002d9\", \"client_secret\": \"ZIMSCz-yNJJZ9wKyPjUJbDp44a1xTQV5jbYj\"}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{url}}/token",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"token"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Add new app client for logged in user",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{ \"app\": \"cursote\" }",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{url}}/Client",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"Client"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get b64 jwt pub key",
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{url}}/jwtpubkey",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"jwtpubkey"
-					]
-				}
-			},
-			"response": []
-		}
-	],
-	"auth": {
-		"type": "bearer",
-		"bearer": [
-			{
-				"key": "token",
-				"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5iYXJyZXJhIiwiaWF0IjoxNjY5ODY3NTY2LCJleHAiOjE2Njk4Njc4NjZ9.mP6cRYUoyY7XQvFrPSpwylKQV8ttzNAYdonV5wZRPq4BSm9b9QRKiuYDBxlEiDwuFRcRFTPu-JOVO5ZmCXWnnanS3UydXceKmCdT7CHJHlIg7ayWrGrlLa58P8M7u9bFk2NVVeYWN890PDKu3-bVfuOXjPaQak-KGtfORrr_6JRXGNGST9EopCrAfpVQYN7orApIJ10yAIK_QgJGp6s0Q0ez4W_F9Iee--nueKxx25V9vKEv4OOFc9s9wwiSYXesTUckMB5xUZvjJwf1a0MB_MKh-VRUptLuJ8asC-OaVMsa4VC42e4DjLfUeeg32DBHjh_6DB-jq2FL3cw5L6Ti2lEAN17g6EWtP_jE1CiaxZhfODdZ-xiK09VSaNzDnMMkG8SfKtNoyLDAMdW8E-RlG-MkGxXpo_37-ius2Q9tRN2cPEyQRWW9NVjYmLXSYBWU7wg2XrNtoCM4kyFF1IOi-7RUPbBgkGt3AyEUX___PzwArLDsf8XxBxefsSuf7j7zSGAPLztDAjHSkNChmb5Ql6kUh7_NtzKzH7yMGHE1uH7sll3Jst-JtLY602Sh8jQEVeQkKziJbqmUtlFVL-K632eDGJR9cWeK9LSujK4ux3GYUF_WW0x-DY5f4zUdCwJxJbOv3zXxsw7RQo07KUCTwwX8aZD23DGp6RX0uMrRANo",
-				"type": "string"
-			}
-		]
-	},
-	"event": [
-		{
-			"listen": "prerequest",
-			"script": {
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
-		},
-		{
-			"listen": "test",
-			"script": {
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
-		}
-	],
-	"variable": [
-		{
-			"key": "toRemove",
-			"value": "907b9a75-7d64-41e4-aad7-f82939c5a566"
-		},
-		{
-			"key": "url",
-			"value": "https://localhost:8080",
-			"type": "string"
-		}
-	]
+  "info": {
+    "_postman_id": "caecc5fb-477f-4bb6-8f32-f9874deb3f9f",
+    "name": "Courses",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "16048735"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "HEAD",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/",
+          "host": ["{{url}}"],
+          "path": [""]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Status",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/",
+          "host": ["{{url}}"],
+          "path": [""]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "/Course",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/Course/",
+          "host": ["{{url}}"],
+          "path": ["Course", ""]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "/Course",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"Diplomatura Desarrollo Seguro de App - 4ta. edición\",\n    \"initDate\": \"2023-03-05T03:00:00.000Z\",\n    \"enrolled\": 19\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}/Course/",
+          "host": ["{{url}}"],
+          "path": ["Course", ""]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "/Course/:id",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/Course/de47e087-4736-4733-ad67-12f71371636e",
+          "host": ["{{url}}"],
+          "path": ["Course", "de47e087-4736-4733-ad67-12f71371636e"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "/Course/:id",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"id\": \"de47e087-4736-4733-ad67-12f71371636e\",\n    \"name\": \"Diplomatura Desarrollo Seguro de App - 2da. edición\",\n    \"initDate\": \"2022-08-20T03:00:00.000Z\",\n    \"enrolled\": 28\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}/Course/de47e087-4736-4733-ad67-12f71371636e",
+          "host": ["{{url}}"],
+          "path": ["Course", "de47e087-4736-4733-ad67-12f71371636e"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "/Course/:id",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/Course/b95468b7-796e-470b-b668-e75cbdf833d8",
+          "host": ["{{url}}"],
+          "path": ["Course", "b95468b7-796e-470b-b668-e75cbdf833d8"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Token with Resource Password Owner",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"grant_type\": \"password\", \"username\": \"rfort\", \"password\": \"1234\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}/token",
+          "host": ["{{url}}"],
+          "path": ["token"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Token with Client Credentials",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"grant_type\": \"client_credentials\", \"client_id\": \"43dd1932-2618-4d6b-9faa-0038910002d9\", \"client_secret\": \"ZIMSCz-yNJJZ9wKyPjUJbDp44a1xTQV5jbYj\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}/token",
+          "host": ["{{url}}"],
+          "path": ["token"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add new app client for logged in user",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"app\": \"cursote\" }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}/Client",
+          "host": ["{{url}}"],
+          "path": ["Client"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get b64 jwt pub key",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url}}/jwtpubkey",
+          "host": ["{{url}}"],
+          "path": ["jwtpubkey"]
+        }
+      },
+      "response": []
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5iYXJyZXJhIiwiaWF0IjoxNjY5ODY3NTY2LCJleHAiOjE2Njk4Njc4NjZ9.mP6cRYUoyY7XQvFrPSpwylKQV8ttzNAYdonV5wZRPq4BSm9b9QRKiuYDBxlEiDwuFRcRFTPu-JOVO5ZmCXWnnanS3UydXceKmCdT7CHJHlIg7ayWrGrlLa58P8M7u9bFk2NVVeYWN890PDKu3-bVfuOXjPaQak-KGtfORrr_6JRXGNGST9EopCrAfpVQYN7orApIJ10yAIK_QgJGp6s0Q0ez4W_F9Iee--nueKxx25V9vKEv4OOFc9s9wwiSYXesTUckMB5xUZvjJwf1a0MB_MKh-VRUptLuJ8asC-OaVMsa4VC42e4DjLfUeeg32DBHjh_6DB-jq2FL3cw5L6Ti2lEAN17g6EWtP_jE1CiaxZhfODdZ-xiK09VSaNzDnMMkG8SfKtNoyLDAMdW8E-RlG-MkGxXpo_37-ius2Q9tRN2cPEyQRWW9NVjYmLXSYBWU7wg2XrNtoCM4kyFF1IOi-7RUPbBgkGt3AyEUX___PzwArLDsf8XxBxefsSuf7j7zSGAPLztDAjHSkNChmb5Ql6kUh7_NtzKzH7yMGHE1uH7sll3Jst-JtLY602Sh8jQEVeQkKziJbqmUtlFVL-K632eDGJR9cWeK9LSujK4ux3GYUF_WW0x-DY5f4zUdCwJxJbOv3zXxsw7RQo07KUCTwwX8aZD23DGp6RX0uMrRANo",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "toRemove",
+      "value": "907b9a75-7d64-41e4-aad7-f82939c5a566"
+    },
+    {
+      "key": "url",
+      "value": "https://localhost:8080",
+      "type": "string"
+    }
+  ]
 }

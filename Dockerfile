@@ -14,7 +14,7 @@ COPY package*.json ./
 
 # RUN npm install
 # If you are building your code for production
-RUN npm ci --only=production --omit=dev
+RUN npm ci --only=production
 
 # Bundle app source
 COPY . .
@@ -22,4 +22,5 @@ COPY . .
 RUN chown -R node:node .
 USER node
 EXPOSE 8080
+# will be overwritten when running docker-compose
 CMD [ "node", "server.js" ]
