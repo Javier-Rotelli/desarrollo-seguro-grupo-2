@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 const courseSchema = new mongoose.Schema({
+  _id: mongoose.Types.ObjectId,
   name: String,
   initDate: Date,
   enrolled: Number,
@@ -11,19 +12,19 @@ export const getCourses = async () => {
   return Course.find();
 };
 
-export const getCourse = async (id) => {
-  return Course.findById(id);
+export const getCourse = async (_id) => {
+  return Course.findById(_id).exec();
 };
 
 export const addCourse = async (course) => {
-  const c = new Course(course);
+  const c = new Course({ ...course, _id: new mongoose.Types.ObjectId() });
   await c.save();
-  return course;
+  return c;
 };
 
 export const updateCourse = async (id, course) => {
   delete course._id;
-  return Course.findByIdAndUpdate(id, course);
+  return Course.findByIdAndUpdate(id, course, { new: true });
 };
 
 export const removeCourse = async (id) => {

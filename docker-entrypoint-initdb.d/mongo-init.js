@@ -1,4 +1,5 @@
-/*global db*/
+
+/*global db ObjectId*/
 db.createUser({
   user: process.env.MONGO_USERNAME,
   pwd: process.env.MONGO_PASSWORD,
@@ -26,19 +27,19 @@ db.createCollection("courses");
 
 db.courses.insertMany([
   {
-    _id: "de47e08747364733ad6712f7",
+    _id: ObjectId("de47e08747364733ad6712f7"),
     name: "Diplomatura Desarrollo Seguro de App - 2da. edición",
     initDate: "2022-08-20T03:00:00.000Z",
     enrolled: 25,
   },
   {
-    _id: "4708ab93854c49efae38151d",
+    _id: ObjectId("4708ab93854c49efae38151d"),
     name: "Diplomatura Desarrollo Seguro de App - 1da. edición",
     initDate: "2022-03-05T03:00:00.000Z",
     enrolled: 50,
   },
   {
-    _id: "e3ade20f5dad45739fa19b92",
+    _id: ObjectId("e3ade20f5dad45739fa19b92"),
     name: "Diplomatura Desarrollo Seguro de App - 3ra. edición",
     initDate: "2023-03-05T03:00:00.000Z",
     enrolled: 0,
@@ -60,7 +61,7 @@ db.createCollection("users");
 
 db.users.insertMany([
   {
-    _id: "1611d4cb6d0647c2a651b2b2",
+    _id: ObjectId("1611d4cb6d0647c2a651b2b2"),
     username: "rfort",
     password: "$2b$10$2jbjk2fZm9dIwkSfpTDKZuWYcOj4pMzEemIMwdtUNVq3IqvgJgVAa",
     name: "Raul",

@@ -19,6 +19,13 @@ components:
       # however, some tools might require explicit settings:
       minLength: 36
       maxLength: 36
+    DBID:
+      type: string
+      pattern: "^[0-9a-fA-F]{24}$"
+      # the regex above limits the length;
+      # however, some tools might require explicit settings:
+      minLength: 24
+      maxLength: 24
     Error:
       type: object
       properties:
@@ -50,7 +57,7 @@ components:
             id:
               type: string
               description: Course entity ID
-              $ref: "#/components/schemas/UUID"
+              $ref: "#/components/schemas/DBID"
 
     Client:
       type: object
@@ -109,6 +116,37 @@ components:
         client_secret:
           description: This should be the plainSecret obtained from POST /Client. The clientSecret porperty in that response is hashed as stored in DB so it won't work!
           type: string
+    TokenResourceOwnerPasswordResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+          description: JWT signed access token
+        refresh_token:
+          type: string
+          description: JWT refresh token
+        username:
+          type: string
+          description: logged in username
+        token_type:
+          enum:
+            - Bearer
+    TokenClientCredentialsResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+          description: JWT signed access token
+        refresh_token:
+          type: string
+          description: JWT refresh token
+        clientId:
+          type: string
+          $ref: "#/components/schemas/UUID"
+          description: logged in client id
+        token_type:
+          enum:
+            - Bearer
 
   responses:
     SuccessResponse:
@@ -146,72 +184,7 @@ components:
     #     application/json:
     #       schema:
     #         $ref: "#/components/schemas/Error"
-    CoursesResponse:
-      description: All courses
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: "#/components/schemas/Course"
-    CourseResponse:
-      description: A Course
-      content:
-        application/json:
-          schema:
-            type: object
-            $ref: "#/components/schemas/Course"
-    ClientResponse:
-      description: The new client
-      content:
-        application/json:
-          schema:
-            allOf:
-              - $ref: "#/components/schemas/Client"
-              - type: object
-                properties:
-                  plainSecret:
-                    type: string
-                    description: The client secret in plain text so the user can configure it on his app. This will be the only time this system exposes this data on this fashion.
-    TokenResourceOwnerPasswordResponse:
-      description: Resource Owner Password response
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              access_token:
-                type: string
-                description: JWT signed access token
-              refresh_token:
-                type: string
-                description: JWT refresh token
-              username:
-                type: string
-                description: logged in username
-              token_type:
-                enum:
-                  - Bearer
-    TokenClientCredentialsResponse:
-      description: Client Credentials response
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              access_token:
-                type: string
-                description: JWT signed access token
-              refresh_token:
-                type: string
-                description: JWT refresh token
-              clientId:
-                type: string
-                $ref: "#/components/schemas/UUID"
-                description: logged in client id
-              token_type:
-                enum:
-                  - Bearer
+
 security: # applies security to all operations unless they are marked as security: []
   - bearerAuth: []
 paths:
@@ -255,11 +228,20 @@ paths:
                   maxLength: 1000
       responses:
         200:
-          description: New course added correctly
+          description: >
+            New client added correctly.
+
+            >>>>> You *MUST* take the contents of ***plainSecret*** and clientId and use those to ask for a new token using the Client Credentials Flow as client_secret and client_id.
           content:
-            applicaiton/json:
+            application/json:
               schema:
-                $ref: "#/components/responses/ClientResponse"
+                allOf:
+                  - type: object
+                    properties:
+                      plainSecret:
+                        type: string
+                        description: The client secret in plain text so the user can configure it on his app. This will be the only time this system exposes this data on this fashion.
+                  - $ref: "#/components/schemas/Client"
 
   "/Course":
     get:
@@ -270,7 +252,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/responses/CoursesResponse"
+                type: array
+                items:
+                  $ref: "#/components/schemas/Course"
     post:
       description: Create a new course
       requestBody:
@@ -286,7 +270,7 @@ paths:
           content:
             applicaiton/json:
               schema:
-                $ref: "#/components/responses/CourseResponse"
+                $ref: "#/components/schemas/Course"
 
   "/Course/{id}":
     get:
@@ -296,20 +280,16 @@ paths:
           name: id
           required: true
           schema:
-            $ref: "#/components/schemas/UUID"
+            $ref: "#/components/schemas/DBID"
       responses:
         200:
           description: The course with that id
           content:
             application/json:
               schema:
-                $ref: "#/components/responses/CourseResponse"
+                $ref: "#/components/schemas/Course"
         404:
-          description: No course for that id
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/responses/NotFound"
+          $ref: "#/components/responses/NotFound"
     delete:
       description: Delete a course by id
       parameters:
@@ -317,14 +297,10 @@ paths:
           name: id
           required: true
           schema:
-            $ref: "#/components/schemas/UUID"
+            $ref: "#/components/schemas/DBID"
       responses:
         200:
-          description: Ok
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/responses/SuccessResponse"
+          $ref: "#/components/responses/SuccessResponse"
     put:
       description: Modify a course by id
       parameters:
@@ -332,7 +308,7 @@ paths:
           name: id
           required: true
           schema:
-            $ref: "#/components/schemas/UUID"
+            $ref: "#/components/schemas/DBID"
       requestBody:
         description: Modifications spec for modifying the course
         required: true
@@ -346,7 +322,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/responses/CourseResponse"
+                $ref: "#/components/schemas/Course"
   "/jwtpubkey":
     get:
       description: Get the base 64 encoded public key used to signthe jwt to verify authenticity of jwt.
@@ -364,10 +340,12 @@ paths:
 
   "/token":
     post:
-      description:
+      description: >
         Initialize the Resource Owner Password or Client Credentials OAUTH Flows.
         NOTE! If you are tring Client Credentials be sure to pass the plainSecret you obtained from
         the POST /Client endpoint, not clientSecret BUT plainSecret.
+
+        Note that the body varias depending on the desired Flow, check the body schema.
       security: []
       requestBody:
         required: true
@@ -379,11 +357,11 @@ paths:
                 - $ref: "#/components/schemas/TokenClientCredentialsBody"
       responses:
         200:
-          description: The course with that id
+          description: Response varias depending on the flow, check response schema. Contains the access_token.
           content:
             application/json:
               schema:
                 anyOf:
-                  - $ref: "#/components/responses/TokenResourceOwnerPasswordResponse"
-                  - $ref: "#/components/responses/TokenClientCredentialsResponse"
+                  - $ref: "#/components/schemas/TokenResourceOwnerPasswordResponse"
+                  - $ref: "#/components/schemas/TokenClientCredentialsResponse"
 tags: []
