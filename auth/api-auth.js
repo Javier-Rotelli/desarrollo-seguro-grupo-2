@@ -34,8 +34,8 @@ export default (app) => {
 
   // When using /token endpoint
   passport.use(
-    new ClientCredentialsStrategy((clientId, clientSecret, done) => {
-      const client = getClient(clientId);
+    new ClientCredentialsStrategy(async (clientId, clientSecret, done) => {
+      const client = await getClient(clientId);
       if (client && !verifySecret(clientId, clientSecret))
         return done(null, false);
       if (!client) return done(null, false);
@@ -51,12 +51,12 @@ export default (app) => {
       if (!token || isTokenExpired(token)) return done(null, false);
 
       if (token.username) {
-        const maybeUser = getUser(token.username);
+        const maybeUser = await getUser(token.username);
         if (!maybeUser) return done(null, false);
         done(null, redactUser(maybeUser));
       }
       if (token.clientId) {
-        const maybeClient = getClient(token.clientId);
+        const maybeClient = await getClient(token.clientId);
         if (!maybeClient) return done(null, false);
         done(null, redactClient(maybeClient));
       }

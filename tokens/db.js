@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 const tokenSchema = new mongoose.Schema({
   token: String,
   username: String,
+  clientId: String,
   iat: Number,
   exp: Number,
 });
